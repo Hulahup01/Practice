@@ -1,87 +1,71 @@
-const ApiError = require("../error/apiError");
-const { Meetup } = require('../models/meetup');
-const { Tag } = require("../models/tag");
+const ValidationError = require("../error/validationError");
+const createMeetupDto = require("../dto/create-meetup.dto");
+const updateMeetupDto = require("../dto/update-meetup.dto");
+const meetupService = require("../services/meetup.service");
 
 class MeetupController {
     
     async create(req, res, next) {
-        const {name, description, time, location, tags} = req.body;
+        const { error, value } = createMeetupDto.validate(req.body);
 
-        if (tags && tags.length != 0) {
-            for (let i = 0; i < tags.length; i++) {
-                tags[i] = await Tag.findByPk(tags[i]);
-                if (!tags[i]) {
-                    return next(ApiError.notFound('Tag not found'));
-                }
-            }
+        if (error) {
+            return next(new ValidationError(error.message));
         }
-
-        const meetup = await Meetup.create({name, description, time, location});
-        await meetup.addTags(tags || []);
-
-        return res.json(meetup);
+  
+        meetupService.create(value)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async getAll(req, res, next) {
-        const meetups = await Meetup.findAll({
-            include: {
-                model: Tag,
-                through: { attributes: [] }
-            }
-            });
-        return res.json(meetups);
+        meetupService.getAll()
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async getById(req, res, next) {
-        const {id} = req.params;
-        const meetup = await Meetup.findByPk(id, {
-            include: {
-                model: Tag,
-                through: { attributes: [] }
-            }
+        const { id } = req.params;
+        meetupService.getById(id)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
         });
-        if (!meetup) {
-            return next(ApiError.notFound('Meetup not found'));
-        }
-        return res.json(meetup);
     }
 
     async update(req, res, next) {
-        const {id} = req.params;
-        const {name, description, time, location, tags} = req.body;
-
-        const meetup = await Meetup.findByPk(id);
-
-        if (!meetup) {
-            return next(ApiError.notFound('Meetup not found'));
+        const { id } = req.params;
+        const { error, value } = updateMeetupDto.validate(req.body);
+        if (error) {
+            return next(new ValidationError(error.message));
         }
-
-        if (tags && tags.length != 0) {
-            for (let i = 0; i < tags.length; i++) {
-                tags[i] = await Tag.findByPk(tags[i]);
-                if (!tags[i]) {
-                    return next(ApiError.notFound('Tag not found'));
-                }
-            }
-        }
-
-        await meetup.update({name, description, time, location});
-        await meetup.setTags(tags || []);
-
-        return res.json(meetup);
+        meetupService.upadate(id, value)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async delete(req, res, next) {
         const {id} = req.params;
-        const meetup = await Meetup.findByPk(id);
-
-        if (!meetup) {
-            return next(ApiError.notFound('Meetup not found'));
-        }
-
-        await meetup.destroy();
-
-        return res.status(200).json({ message: `Meetup ${id} deleted successfully` });
+        meetupService.delete(id)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 }
 

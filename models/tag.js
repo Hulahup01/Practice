@@ -20,4 +20,4 @@ const Tag = sequelize.define('tag', {
 });
 
 
-module.exports = { Tag };
+module.exports = Tag;
