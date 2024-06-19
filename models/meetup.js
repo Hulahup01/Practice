@@ -1,6 +1,6 @@
 const sequelize = require('../db');
 const { DataTypes } = require('sequelize');
-const { Tag } = require('./tag');
+const Tag = require('./tag');
 
 
 const Meetup = sequelize.define('meetup', {
@@ -50,4 +50,4 @@ Meetup.belongsToMany(Tag, {through: MeetupTag});
 Tag.belongsToMany(Meetup, {through: MeetupTag});
 
 
-module.exports = { Meetup } 
+module.exports = Meetup

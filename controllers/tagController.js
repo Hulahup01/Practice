@@ -1,54 +1,73 @@
-const ApiError = require("../error/apiError");
-const { Tag } = require("../models/tag");
+const ValidationError = require("../error/validationError");
+const createTagDto = require("../dto/create-tag.dto");
+const updateTagDto = require("../dto/update-tag.dto");
+const tagService = require("../services/tag.service");
 
 class TagController {
     
     async create(req, res, next) {
-        const {label} = req.body;
-        const tag = await Tag.create({label});
-        return res.json(tag);
+        const { error, value } = createTagDto.validate(req.body);
+
+        if (error) {
+            return next(new ValidationError(error.message));
+        }
+
+        tagService.create(value)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async getAll(req, res, next) {
-        const tags = await Tag.findAll();
-        return res.json(tags);
+        tagService.getAll()
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async getById(req, res, next) {
-        const {id} = req.params;
-        const tag = await Tag.findByPk(id);
-        if (!tag) {
-            return next(ApiError.notFound('Tag not found'));
-        }
-        return res.json(tag);
+        const { id } = req.params;
+        tagService.getById(id)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async update(req, res, next) {
         const {id} = req.params;
-        const {label} = req.body;
+        const { error, value } = updateTagDto.validate(req.body);
 
-        const tag = await Tag.findByPk(id);
-
-        if (!tag) {
-            return next(ApiError.notFound('Tag not found'));
+        if (error) {
+            return next(new ValidationError(error.message));
         }
 
-        await tag.update({label});
-
-        return res.json(tag);
+        tagService.update(id, value)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 
     async delete(req, res, next) {
         const {id} = req.params;
-        const tag = await Tag.findByPk(id);
-
-        if (!tag) {
-            return next(ApiError.notFound('Tag not found'));
-        }
-
-        await tag.destroy();
-
-        return res.status(200).json({ message: `Tag ${id} deleted successfully` });
+        tagService.delete(id)
+        .then((result) => {
+            return res.json(result);
+        })
+        .catch((error) => {
+            next(error);
+        });
     }
 }
 
