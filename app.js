@@ -1,12 +1,15 @@
 require('dotenv').config();
 const express = require('express');
 const sequelize = require('./db');
-const models = require('./models/models');
+const router = require('./routes/index');
+const errorHandler = require('./middleware/errorHandlingMiddleware');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
+app.use('/api', router);
+app.use(errorHandler);
 
 app.get('/', (req, res) => {
     res.status(200).json({message: 'API'});
