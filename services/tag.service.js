@@ -1,7 +1,7 @@
 const ServiceError = require("../error/serviceError");
 const TagErrors = require("../error/tagErrors");
 const Tag = require("../models/tag");
-const { Op } = require('sequelize');
+const { getSortFields, getFilterFields } = require("./utils/getFilterAndSortFields");
 
 class TagService {
 
@@ -10,20 +10,9 @@ class TagService {
     }
 
     async getAll(getTagDto) {
-        //?? not sure which is the best solution
         const { limit, offset } = getTagDto;
-        const sortFields = [];
-        const sortRegex = /Sort$/;
-        const filterFields = {};
-        for (const key in getTagDto) {
-            if (sortRegex.test(key)) {
-                sortFields.push([key.replace(sortRegex, ''), getTagDto[key]]);
-            } else if (key !== 'limit' && key !== 'offset') {
-                filterFields[key] = {
-                    [Op.like]: `%${getTagDto[key]}%`
-                };
-            }
-        }
+        const sortFields = getSortFields(getTagDto);
+        const filterFields = getFilterFields(getTagDto);
         return await Tag.findAll({
             order: sortFields,
             limit: limit,
