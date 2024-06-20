@@ -1,6 +1,7 @@
 const ValidationError = require("../error/validationError");
 const createTagDto = require("../dto/create-tag.dto");
 const updateTagDto = require("../dto/update-tag.dto");
+const getTagDto = require("../dto/get-tag.dto");
 const tagService = require("../services/tag.service");
 
 class TagController {
@@ -22,7 +23,13 @@ class TagController {
     }
 
     async getAll(req, res, next) {
-        tagService.getAll()
+        const { error, value } = getTagDto.validate(req.query);
+
+        if (error) {
+            return next(new ValidationError(error.message));
+        }
+
+        tagService.getAll(value)
         .then((result) => {
             return res.json(result);
         })
