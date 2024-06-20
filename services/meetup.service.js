@@ -9,7 +9,7 @@ class MeetupService {
 
     async create(meetupDto) {
         const { tags } = meetupDto;
-        if (tags && tags.length != 0) {
+        if (tags) {
             for (let i = 0; i < tags.length; i++) {
                 tags[i] = await Tag.findByPk(tags[i]);
                 if (!tags[i]) {
@@ -48,7 +48,7 @@ class MeetupService {
         return meetup;
     }
 
-    async upadate(id, newMeetupDto) {
+    async update(id, newMeetupDto) {
         const meetup = await Meetup.findByPk(id);
 
         if (!meetup) {
@@ -57,7 +57,7 @@ class MeetupService {
         }
         
         const { tags } = newMeetupDto;
-        if (tags && tags.length != 0) {
+        if (tags) {
             for (let i = 0; i < tags.length; i++) {
                 tags[i] = await Tag.findByPk(tags[i]);
                 if (!tags[i]) {
