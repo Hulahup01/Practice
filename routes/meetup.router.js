@@ -1,7 +1,6 @@
 const Router = require('express');
 const router = new Router();
-const meetupController = require('../controllers/meetupController');
-
+const meetupController = require('../controllers/meetup.controller');
 
 router.get('/', meetupController.getAll);
 router.get('/:id', meetupController.getById);

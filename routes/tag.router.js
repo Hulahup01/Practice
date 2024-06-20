@@ -1,7 +1,6 @@
 const Router = require('express');
 const router = new Router();
-const tagController =  require('../controllers/tagController');
-
+const tagController =  require('../controllers/tag.controller');
 
 router.get('/', tagController.getAll);
 router.get('/:id', tagController.getById);

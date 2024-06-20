@@ -1,7 +1,6 @@
 const sequelize = require('../db');
 const { DataTypes } = require('sequelize');
-const Tag = require('./tag');
-
+const Tag = require('./tag.entity');
 
 const Meetup = sequelize.define('meetup', {
     id: {
@@ -34,7 +33,6 @@ const Meetup = sequelize.define('meetup', {
     timestamps: false
 });
 
-
 const MeetupTag = sequelize.define('meetup_tag', {
     id: {
         type: DataTypes.INTEGER,
@@ -48,6 +46,5 @@ const MeetupTag = sequelize.define('meetup_tag', {
 
 Meetup.belongsToMany(Tag, {through: MeetupTag});
 Tag.belongsToMany(Meetup, {through: MeetupTag});
-
 
 module.exports = Meetup

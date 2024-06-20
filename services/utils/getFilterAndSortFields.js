@@ -1,6 +1,5 @@
 const {Op} = require("sequelize");
 
-
 function getFilterFields(dto) {
     const filterFields = {};
     const filterRegex = /Filter$/; // Regular expression to identify keys ending with 'Filter'
@@ -24,6 +23,5 @@ function getSortFields(dto) {
     }
     return sortFields;
 }
-
 
 module.exports = { getFilterFields, getSortFields };

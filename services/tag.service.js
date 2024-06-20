@@ -1,6 +1,6 @@
-const ServiceError = require("../error/serviceError");
-const TagErrors = require("../error/tagErrors");
-const Tag = require("../models/tag");
+const ServiceError = require("../errors/service.error");
+const TagErrors = require("../errors/error-status/tag-errors");
+const Tag = require("../models/tag.entity");
 const { getSortFields, getFilterFields } = require("./utils/getFilterAndSortFields");
 
 class TagService {
@@ -50,6 +50,5 @@ class TagService {
         return { message: `Tag ${id} deleted successfully` };
     }
 }
-
 
 module.exports = new TagService();

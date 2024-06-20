@@ -1,8 +1,9 @@
 require('dotenv').config();
 const express = require('express');
 const sequelize = require('./db');
+const status = require('http-status');
 const router = require('./routes/index');
-const errorHandler = require('./middleware/errorHandlingMiddleware');
+const errorHandler = require('./middleware/error-handling.middleware');
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -12,7 +13,7 @@ app.use('/api', router);
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
-    res.status(200).json({message: 'API'});
+    res.status(status.OK).json({message: 'API'});
 });
 
 const start = async () => {
