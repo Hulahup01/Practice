@@ -1,5 +1,6 @@
 const ValidationError = require("../error/validationError");
 const createMeetupDto = require("../dto/create-meetup.dto");
+const getMeetupDto = require("../dto/get-meetup.dto");
 const updateMeetupDto = require("../dto/update-meetup.dto");
 const meetupService = require("../services/meetup.service");
 
@@ -22,7 +23,13 @@ class MeetupController {
     }
 
     async getAll(req, res, next) {
-        meetupService.getAll()
+        const { error, value } = getMeetupDto.validate(req.query);
+
+        if (error) {
+            return next(new ValidationError(error.message));
+        }
+
+        meetupService.getAll(value)
         .then((result) => {
             return res.json(result);
         })
