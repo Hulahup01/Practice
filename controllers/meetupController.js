@@ -48,7 +48,7 @@ class MeetupController {
         if (error) {
             return next(new ValidationError(error.message));
         }
-        meetupService.upadate(id, value)
+        meetupService.update(id, value)
         .then((result) => {
             return res.json(result);
         })
