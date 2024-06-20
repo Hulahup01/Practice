@@ -1,6 +1,7 @@
-const ApiError = require('../error/apiError');
-const ServiceError = require('../error/serviceError');
-const ValidationError = require('../error/validationError');
+const ApiError = require('../errors/api.error');
+const ServiceError = require('../errors/service.error');
+const ValidationError = require('../errors/validation.error');
+const status = require('http-status');
 
 module.exports = function (err, req, res, next) {
     if (err instanceof ApiError) {
@@ -12,6 +13,6 @@ module.exports = function (err, req, res, next) {
     if (err instanceof ValidationError) {
         return res.status(err.status).json({message: err.message});
     }
-    console.log(err);
-    return res.status(500).json({message: "Unexpected error!"});
+    console.error(err);
+    return res.status(status.INTERNAL_SERVER_ERROR).json({message: "!Unexpected errors!"});
 }

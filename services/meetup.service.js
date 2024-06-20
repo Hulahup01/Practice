@@ -1,11 +1,10 @@
-const ServiceError = require("../error/serviceError");
-const MeetupErrors = require("../error/meetupErrors");
-const TagErrors = require("../error/tagErrors");
-const Meetup = require("../models/meetup");
-const Tag = require("../models/tag");
+const ServiceError = require("../errors/service.error");
+const MeetupErrors = require("../errors/error-status/meetup-errors");
+const TagErrors = require("../errors/error-status/tag-errors");
+const Meetup = require("../models/meetup.entity");
+const Tag = require("../models/tag.entity");
 const { getSortFields, getFilterFields } = require("./utils/getFilterAndSortFields");
-const {Op, Sequelize} = require("sequelize");
-
+const { Op, Sequelize } = require("sequelize");
 
 class MeetupService {
 

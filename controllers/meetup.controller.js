@@ -1,19 +1,19 @@
-const ValidationError = require("../error/validationError");
-const createTagDto = require("../dto/create-tag.dto");
-const updateTagDto = require("../dto/update-tag.dto");
-const getTagDto = require("../dto/get-tag.dto");
-const tagService = require("../services/tag.service");
+const ValidationError = require("../errors/validation.error");
+const createMeetupDto = require("../dto/create-meetup.dto");
+const getMeetupDto = require("../dto/get-meetup.dto");
+const updateMeetupDto = require("../dto/update-meetup.dto");
+const meetupService = require("../services/meetup.service");
 
-class TagController {
+class MeetupController {
     
     async create(req, res, next) {
-        const { error, value } = createTagDto.validate(req.body);
+        const { error, value } = createMeetupDto.validate(req.body);
 
         if (error) {
             return next(new ValidationError(error.message));
         }
-
-        tagService.create(value)
+  
+        meetupService.create(value)
         .then((result) => {
             return res.json(result);
         })
@@ -23,13 +23,13 @@ class TagController {
     }
 
     async getAll(req, res, next) {
-        const { error, value } = getTagDto.validate(req.query);
+        const { error, value } = getMeetupDto.validate(req.query);
 
         if (error) {
             return next(new ValidationError(error.message));
         }
 
-        tagService.getAll(value)
+        meetupService.getAll(value)
         .then((result) => {
             return res.json(result);
         })
@@ -40,7 +40,7 @@ class TagController {
 
     async getById(req, res, next) {
         const { id } = req.params;
-        tagService.getById(id)
+        meetupService.getById(id)
         .then((result) => {
             return res.json(result);
         })
@@ -50,14 +50,12 @@ class TagController {
     }
 
     async update(req, res, next) {
-        const {id} = req.params;
-        const { error, value } = updateTagDto.validate(req.body);
-
+        const { id } = req.params;
+        const { error, value } = updateMeetupDto.validate(req.body);
         if (error) {
             return next(new ValidationError(error.message));
         }
-
-        tagService.update(id, value)
+        meetupService.update(id, value)
         .then((result) => {
             return res.json(result);
         })
@@ -68,7 +66,7 @@ class TagController {
 
     async delete(req, res, next) {
         const {id} = req.params;
-        tagService.delete(id)
+        meetupService.delete(id)
         .then((result) => {
             return res.json(result);
         })
@@ -78,4 +76,4 @@ class TagController {
     }
 }
 
-module.exports = new TagController();
+module.exports = new MeetupController();

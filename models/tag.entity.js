@@ -1,7 +1,6 @@
 const sequelize = require('../db');
 const { DataTypes } = require('sequelize');
 
-
 const Tag = sequelize.define('tag', {
     id: {
         type: DataTypes.INTEGER,
@@ -18,6 +17,5 @@ const Tag = sequelize.define('tag', {
 }, {
     timestamps: false
 });
-
 
 module.exports = Tag;
