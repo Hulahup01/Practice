@@ -3,7 +3,8 @@ const MeetupErrors = require("../error/meetupErrors");
 const TagErrors = require("../error/tagErrors");
 const Meetup = require("../models/meetup");
 const Tag = require("../models/tag");
-const { Op } = require('sequelize');
+const { getSortFields, getFilterFields } = require("./utils/getFilterAndSortFields");
+const {Op, Sequelize} = require("sequelize");
 
 
 class MeetupService {
@@ -26,32 +27,40 @@ class MeetupService {
     }
 
     async getAll(getMeetupDto) {
-        //?? not sure which is the best solution
-        const { limit, offset } = getMeetupDto;
-        const sortFields = [];
-        const sortRegex = /Sort$/;
-        const filterFields = {};
-        for (const key in getMeetupDto) {
-            if (sortRegex.test(key)) {
-                sortFields.push([key.replace(sortRegex, ''), getMeetupDto[key]]);
-            } else if (key !== 'limit' && key !== 'offset') {
-                filterFields[key] = {
-                    [Op.like]: `%${getMeetupDto[key]}%`
-                };
-            }
+        const { limit, offset, tags } = getMeetupDto;
+        const sortFields = getSortFields(getMeetupDto);
+        const filterFields = getFilterFields(getMeetupDto)
+        const tagIds = [];
+        if (tags) {
+            const tagModels = await Tag.findAll({
+                where: {
+                    label: tags
+                }
+            });
+            tagIds.push(...tagModels.map(tag => tag.id));
+
+        }
+
+        if (tagIds.length) {
+            filterFields.id = {
+                [Op.in]: Sequelize.literal(`(SELECT "meetupId" FROM "meetup_tags" WHERE "tagId" IN (${tagIds.join(', ')}))`)
+            };
         }
 
         return await Meetup.findAll({
-            include: {
-                model: Tag,
-                through: { attributes: [] }
-            },
+            include: [
+                {
+                    model: Tag,
+                    through: { attributes: [] }
+                }
+            ],
             order: sortFields,
             limit: limit,
             offset: offset,
             where: filterFields
         });
     }
+
 
     async getById(id) {
         const meetup = await Meetup.findByPk(id, {

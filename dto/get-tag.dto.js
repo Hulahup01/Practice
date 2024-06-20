@@ -8,7 +8,7 @@ const getTagDto = Joi.object({
         .optional()
         .allow(null),
 
-    label: Joi.string()
+    labelFilter: Joi.string()
         .min(1)
         .max(255)
         .optional()
