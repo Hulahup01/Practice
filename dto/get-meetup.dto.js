@@ -20,24 +20,24 @@ const getMeetupDto = Joi.object({
         .optional()
         .allow(null),
 
-    name: Joi.string()
+    nameFilter: Joi.string()
         .min(1)
         .max(255)
         .optional()
         .allow(null),
 
-    description: Joi.string()
+    descriptionFilter: Joi.string()
         .min(1)
         .max(65535)
         .optional()
         .allow(null),
 
-    time: Joi.date()
+    timeFilter: Joi.date()
         .iso()
         .optional()
         .allow(null),
 
-    location: Joi.string()
+    locationFilter: Joi.string()
         .min(1)
         .max(255)
         .optional()
@@ -53,7 +53,18 @@ const getMeetupDto = Joi.object({
         .integer()
         .min(0)
         .optional()
+        .allow(null),
+
+    tags: Joi.array()
+        .items(
+            Joi.string()
+                .min(1)
+                .max(255)
+        )
+        .optional()
+        .unique()
         .allow(null)
+
 });
 
 module.exports = getMeetupDto;
