@@ -7,6 +7,7 @@ const meetupService = require("../services/meetup.service");
 class MeetupController {
     
     async create(req, res, next) {
+        // #swagger.tags = ['Meetups']
         const { error, value } = createMeetupDto.validate(req.body);
 
         if (error) {
@@ -23,6 +24,7 @@ class MeetupController {
     }
 
     async getAll(req, res, next) {
+        // #swagger.tags = ['Meetups']
         const { error, value } = getMeetupDto.validate(req.query);
 
         if (error) {
@@ -39,6 +41,7 @@ class MeetupController {
     }
 
     async getById(req, res, next) {
+        // #swagger.tags = ['Meetups']
         const { id } = req.params;
         meetupService.getById(id)
         .then((result) => {
@@ -50,6 +53,7 @@ class MeetupController {
     }
 
     async update(req, res, next) {
+        // #swagger.tags = ['Meetups']
         const { id } = req.params;
         const { error, value } = updateMeetupDto.validate(req.body);
         if (error) {
@@ -65,6 +69,7 @@ class MeetupController {
     }
 
     async delete(req, res, next) {
+        // #swagger.tags = ['Meetups']
         const {id} = req.params;
         meetupService.delete(id)
         .then((result) => {

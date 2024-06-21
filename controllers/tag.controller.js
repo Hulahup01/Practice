@@ -7,6 +7,7 @@ const tagService = require("../services/tag.service");
 class TagController {
     
     async create(req, res, next) {
+        // #swagger.tags = ['Tags']
         const { error, value } = createTagDto.validate(req.body);
 
         if (error) {
@@ -23,6 +24,7 @@ class TagController {
     }
 
     async getAll(req, res, next) {
+        // #swagger.tags = ['Tags']
         const { error, value } = getTagDto.validate(req.query);
 
         if (error) {
@@ -39,6 +41,7 @@ class TagController {
     }
 
     async getById(req, res, next) {
+        // #swagger.tags = ['Tags']
         const { id } = req.params;
         tagService.getById(id)
         .then((result) => {
@@ -50,6 +53,7 @@ class TagController {
     }
 
     async update(req, res, next) {
+        // #swagger.tags = ['Tags']
         const {id} = req.params;
         const { error, value } = updateTagDto.validate(req.body);
 
@@ -67,6 +71,7 @@ class TagController {
     }
 
     async delete(req, res, next) {
+        // #swagger.tags = ['Tags']
         const {id} = req.params;
         tagService.delete(id)
         .then((result) => {
