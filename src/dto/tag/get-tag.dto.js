@@ -1,6 +1,6 @@
-const PaginationSortSearchDto = require('../paginationSortSearch.dto');
+const PaginationDto = require('../pagination.dto');
 
-class GetTagDto extends PaginationSortSearchDto {
+class GetTagDto extends PaginationDto {
     constructor(data) {
         super(data);
     }
