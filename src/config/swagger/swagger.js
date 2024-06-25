@@ -17,6 +17,10 @@ const doc = {
             name: "Tags",
             definitions: "Endpoint"
         },
+        {
+            name: "Auth",
+            definitions: "Endpoint"
+        },
     ],
     definitions: {
         Tags: {
