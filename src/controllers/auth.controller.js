@@ -8,11 +8,12 @@ class AuthController {
     async login(req, res, next) {
         // #swagger.tags = ['Auth']
         const loginDto = new LoginDto(req.body);
-        const user = await userService.getUser(loginDto);
-        delete user.dataValues.password;
-        const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "1h"});
+        const user = await userService.getByEmailAndPassword(loginDto);
 
-        res.cookie('token', token, {
+        delete user.dataValues.password;
+        const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "10min"});
+
+        res.cookie('jwt-token', token, {
             httpOnly: true,
         }).status(httpStatus.OK).send(token);
     }

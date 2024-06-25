@@ -4,7 +4,6 @@ const ValidationError = require('../errors/validation.error');
 const httpStatus = require('http-status');
 
 module.exports = function (err, req, res, next) {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     if (err instanceof ApiError) {
         return res.status(err.status).json({message: err.message});
     }

@@ -1,4 +1,5 @@
 const ServiceError = require("../errors/service.error");
+const AuthErrors = require("../errors/error-status/auth-errors");
 const User = require("../models/user.entity");
 const bcrypt = require("bcrypt");
 
@@ -8,20 +9,20 @@ class UserService {
         try {
             return (await User.create(registerDto));
         } catch (e) {
-            throw new ServiceError('User already exists'); // ????
+            throw new ServiceError(AuthErrors.USER_ALREADY_EXIST); //??
         }
     }
 
-    async getUser(loginDto) {
+    async getByEmailAndPassword(loginDto) {
         const user = await User.findOne({
             where: { email: loginDto.email }
         });
         if (!user) {
-            throw new ServiceError('User does not exist');
+            throw new ServiceError(AuthErrors.USER_NOT_FOUND);
         }
         const isMatch = await bcrypt.compare(loginDto.password, user.password);
         if (!isMatch) {
-            throw new ServiceError('Incorrect password');
+            throw new ServiceError(AuthErrors.INCORRECT_PASSWORD);
         }
         return user;
     }
