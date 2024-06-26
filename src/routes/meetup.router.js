@@ -5,8 +5,8 @@ const meetupController = require('../controllers/meetup.controller');
 const createMeetupSchema = require('../schemas/meetup/create-meetup.schema');
 const updateMeetupSchema = require('../schemas/meetup/update-meetup.schema');
 const getMeetupSchema = require('../schemas/meetup/get-meetup.schema');
-const isValid = require('../middleware/validation.middleware');
-const checkRole = require('../middleware/check-role.middleware');
+const isValid = require('../middlewares/validation.middleware');
+const checkRole = require('../middlewares/check-role.middleware');
 const asyncHandler = require('express-async-handler');
 
 router.get(

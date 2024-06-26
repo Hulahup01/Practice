@@ -1,18 +1,17 @@
 const ServiceError = require("../errors/service.error");
 const MeetupErrors = require("../errors/error-status/meetup-errors");
-const Meetup = require("../models/meetup.entity");
 const Tag = require("../models/tag.entity");
+const TagRepository = require("../repositories/tag.repository");
+const MeetupRepository = require("../repositories/meetup.repository");
 const { Op, Sequelize } = require("sequelize");
 
 class MeetupService {
     async create(createMeetupDto) {
-        const meetup = await Meetup.create(createMeetupDto);
-
         const { tags } = createMeetupDto;
         if (tags) {
             const tagObjs = [];
             for (let i = 0; i < tags.length; i++) {
-                const [tag, created] = await Tag.findOrCreate({
+                const [tag, created] = await TagRepository.findOrCreate({
                     where: { label: tags[i] },
                     defaults: {
                         label: tags[i],
@@ -20,14 +19,12 @@ class MeetupService {
                 });
                 tagObjs.push(tag);
             }
-            await meetup.addTags(tagObjs);
-            meetup.dataValues.tags = tagObjs; //? чтобы митап возвращался вместе с его тегами
+            createMeetupDto.tags = tagObjs;
         }
-
-        return meetup;
+        return await MeetupRepository.create(createMeetupDto);
     }
 
-    async getAll(getMeetupDto) { // ????????????????
+    async getAll(getMeetupDto) {
         const { limit, page, sort='id', order='ASC', search, tags } = getMeetupDto;
         const offset = page * (page - 1) || 0;
         const filters = {};
@@ -55,7 +52,7 @@ class MeetupService {
 
         if (tags) {
             const tagIds = [];
-            const tagModels = await Tag.findAll({
+            const tagModels = await TagRepository.findAll({
                 where: {
                     label: tags
                 }
@@ -68,7 +65,7 @@ class MeetupService {
             }
         }
 
-        return await Meetup.findAll({
+        return await MeetupRepository.findAll({
             include: [
                 {
                     model: Tag,
@@ -83,7 +80,7 @@ class MeetupService {
     }
 
     async getById(id) {
-        const meetup = await Meetup.findByPk(id, {
+        const meetup = await MeetupRepository.findByPk(id, {
             include: {
                 model: Tag,
                 through: { attributes: [] }
@@ -96,17 +93,11 @@ class MeetupService {
     }
 
     async update(id, updateMeetupDto) {
-        const meetup = await Meetup.findByPk(id);
-        if (!meetup) {
-            throw ServiceError.notFound(MeetupErrors.MEETUP_NOT_FOUND);
-        }
-        await meetup.update(updateMeetupDto);
-
         const { tags } = updateMeetupDto;
         if (tags) {
             const tagObjs = [];
             for (let i = 0; i < tags.length; i++) {
-                const [tag, created] = await Tag.findOrCreate({
+                const [tag, created] = await TagRepository.findOrCreate({
                     where: { label: tags[i] },
                     defaults: {
                         label: tags[i],
@@ -114,19 +105,20 @@ class MeetupService {
                 });
                 tagObjs.push(tag);
             }
-            await meetup.setTags(tagObjs);
-            meetup.dataValues.tags = tagObjs; //? чтобы митап возвращался вместе с его тегами
+            updateMeetupDto.tags = tagObjs;
         }
-
+        const meetup = await MeetupRepository.update(id, updateMeetupDto);
+        if (!meetup) {
+            throw new ServiceError(MeetupErrors.MEETUP_NOT_FOUND);
+        }
         return meetup;
     }
 
     async delete(id) {
-        const meetup = await Meetup.findByPk(id);
-        if (!meetup) {
-            throw ServiceError.notFound(MeetupErrors.MEETUP_NOT_FOUND);
+        const deletedRows = await MeetupRepository.remove(id);
+        if (deletedRows === 0) {
+            throw new ServiceError(MeetupErrors.MEETUP_NOT_FOUND);
         }
-        await meetup.destroy();
         return { message: `Meetup ${id} deleted successfully` };
     }
 }

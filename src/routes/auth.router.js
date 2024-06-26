@@ -4,7 +4,7 @@ const passport = require("passport");
 const authController = require('../controllers/auth.controller');
 const loginSchema = require('../schemas/auth/login.schema');
 const registerSchema = require('../schemas/auth/register.schema');
-const isValid = require('../middleware/validation.middleware');
+const isValid = require('../middlewares/validation.middleware');
 const asyncHandler = require('express-async-handler');
 
 router.post(
@@ -21,6 +21,12 @@ router.get(
     '/logout',
     passport.authenticate('jwt', { session: false }),
     asyncHandler(authController.logout)
+);
+
+router.post(
+    '/update-tokens',
+    passport.authenticate('jwt', { session: false }),
+    asyncHandler(authController.updateTokens)
 );
 
 module.exports = router;

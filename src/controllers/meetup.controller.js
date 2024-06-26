@@ -1,7 +1,7 @@
 const ValidationError = require("../errors/validation.error");
-const CreateMeetupDto = require("../dto/meetup/create-meetup.dto");
-const UpdateMeetupDto = require("../dto/meetup/update-meetup.dto");
-const GetMeetupDto = require("../dto/meetup/get-meetup.dto");
+const CreateMeetupDto = require("../dtos/meetup/create-meetup.dto");
+const UpdateMeetupDto = require("../dtos/meetup/update-meetup.dto");
+const GetMeetupDto = require("../dtos/meetup/get-meetup.dto");
 const meetupService = require("../services/meetup.service");
 const httpStatus = require("http-status");
 

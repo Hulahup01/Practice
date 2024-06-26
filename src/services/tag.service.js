@@ -1,44 +1,42 @@
 const ServiceError = require("../errors/service.error");
 const TagErrors = require("../errors/error-status/tag-errors");
-const Tag = require("../models/tag.entity");
+const TagRepository = require("../repositories/tag.repository");
 
 class TagService {
     async create(createTagDto) {
-        return (await Tag.create(createTagDto));
+        return await TagRepository.create(createTagDto);
     }
 
     async getAll(getTagDto) {
         const { limit, page } = getTagDto;
         const offset = page * (page - 1) || 0;
-        return await Tag.findAll({
+        return await TagRepository.findAll({
             limit: limit,
             offset: offset,
         });
     }
 
     async getById(id) {
-        const tag = await Tag.findByPk(id);
+        const tag = await TagRepository.findByPk(id);
         if (!tag) {
-            throw ServiceError.notFound(TagErrors.TAG_NOT_FOUND);
+            throw new ServiceError(TagErrors.TAG_NOT_FOUND);
         }
         return tag;
     }
 
     async update(id, updateTagDto) {
-        const tag = await Tag.findByPk(id);
+        const tag = await TagRepository.update(id, updateTagDto);
         if (!tag) {
-            throw ServiceError.notFound(TagErrors.TAG_NOT_FOUND);
+            throw new ServiceError(TagErrors.TAG_NOT_FOUND);
         }
-        await tag.update(updateTagDto);
         return tag;
     }
 
     async delete(id) {
-        const tag = await Tag.findByPk(id);
-        if (!tag) {
-            throw ServiceError.notFound(TagErrors.TAG_NOT_FOUND);
+        const deletedRows = await TagRepository.remove(id);
+        if (deletedRows === 0) {
+            throw new ServiceError(TagErrors.TAG_NOT_FOUND);
         }
-        await tag.destroy();
         return { message: `Tag ${id} deleted successfully` };
     }
 }

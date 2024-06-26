@@ -5,8 +5,8 @@ const tagController =  require('../controllers/tag.controller');
 const createTagSchema = require('../schemas/tag/create-tag.schema');
 const updateTagSchema = require('../schemas/tag/update-tag.schema');
 const getTagSchema = require('../schemas/tag/get-tag.schema');
-const checkRole = require('../middleware/check-role.middleware');
-const isValid = require('../middleware/validation.middleware');
+const checkRole = require('../middlewares/check-role.middleware');
+const isValid = require('../middlewares/validation.middleware');
 const asyncHandler = require('express-async-handler');
 
 router.get(

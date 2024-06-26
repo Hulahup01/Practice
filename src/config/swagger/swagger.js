@@ -11,15 +11,15 @@ const doc = {
     tags: [
         {
             name: "Meetups",
-            definitions: "Endpoint"
+            description: "Endpoint"
         },
         {
             name: "Tags",
-            definitions: "Endpoint"
+            description: "Endpoint"
         },
         {
             name: "Auth",
-            definitions: "Endpoint"
+            description: "Endpoint"
         },
     ],
     definitions: {

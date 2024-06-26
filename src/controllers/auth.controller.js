@@ -1,7 +1,7 @@
 const httpStatus = require("http-status");
 const userService = require("../services/user.service");
-const RegisterDto = require("../dto/auth/register.dto");
-const LoginDto = require("../dto/auth/login.dto");
+const RegisterDto = require("../dtos/auth/register.dto");
+const LoginDto = require("../dtos/auth/login.dto");
 const jwt = require('jsonwebtoken')
 
 class AuthController {
@@ -11,7 +11,7 @@ class AuthController {
         const user = await userService.getByEmailAndPassword(loginDto);
 
         delete user.dataValues.password;
-        const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "10min"});
+        const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "1h"});
 
         res.cookie('jwt-access-token', token, { // где хранить название ключ 'jwt-access-token'
             httpOnly: true,
@@ -28,6 +28,10 @@ class AuthController {
     async logout(req, res, next) {
         // #swagger.tags = ['Auth']
         res.clearCookie('jwt-access-token').status(httpStatus.OK).json({ message: 'Logged out' });
+    }
+
+    async updateTokens(req, res, next) {
+        // #swagger.tags = ['Auth']
     }
 }
 

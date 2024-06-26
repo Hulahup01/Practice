@@ -1,7 +1,7 @@
 const ValidationError = require("../errors/validation.error");
-const CreateTagDto = require("../dto/tag/create-tag.dto");
-const UpdateTagDto = require("../dto/tag/update-tag.dto");
-const GetTagDto = require("../dto/tag/get-tag.dto");
+const CreateTagDto = require("../dtos/tag/create-tag.dto");
+const UpdateTagDto = require("../dtos/tag/update-tag.dto");
+const GetTagDto = require("../dtos/tag/get-tag.dto");
 const tagService = require("../services/tag.service");
 const httpStatus = require("http-status");
 
