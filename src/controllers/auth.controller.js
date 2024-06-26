@@ -13,7 +13,7 @@ class AuthController {
         delete user.dataValues.password;
         const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "10min"});
 
-        res.cookie('jwt-token', token, {
+        res.cookie('jwt-access-token', token, { // где хранить название ключ 'jwt-access-token'
             httpOnly: true,
         }).status(httpStatus.OK).send(token);
     }
@@ -27,6 +27,7 @@ class AuthController {
 
     async logout(req, res, next) {
         // #swagger.tags = ['Auth']
+        res.clearCookie('jwt-access-token').status(httpStatus.OK).json({ message: 'Logged out' });
     }
 }
 

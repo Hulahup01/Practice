@@ -1,10 +1,11 @@
 const Router = require('express');
 const router = new Router();
+const passport = require("passport");
 const authController = require('../controllers/auth.controller');
-const isValid = require('../middleware/validation.middleware');
-const asyncHandler = require('express-async-handler');
 const loginSchema = require('../schemas/auth/login.schema');
 const registerSchema = require('../schemas/auth/register.schema');
+const isValid = require('../middleware/validation.middleware');
+const asyncHandler = require('express-async-handler');
 
 router.post(
     '/login',
@@ -18,6 +19,7 @@ router.post(
 );
 router.get(
     '/logout',
+    passport.authenticate('jwt', { session: false }),
     asyncHandler(authController.logout)
 );
 
