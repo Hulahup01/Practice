@@ -4,7 +4,8 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",
-    "swagger-gen": "node src/config/swagger/swagger.js"
+    "swagger-gen": "node src/config/swagger/swagger.js",
+    "start": "node --env-file=.env.development app.js"
   },
   "author": "",
   "license": "ISC",
