@@ -27,8 +27,8 @@ class BaseRepository {
         return (await this.model.update(body, { where: { id }, returning: true }))[1];
     }
 
-    async remove (id) {
-        return (await this.model.destroy({ where: { id } }));
+    async remove (options) {
+        return (await this.model.destroy(options));
     }
 }
 

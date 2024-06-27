@@ -37,7 +37,7 @@ class MeetupController {
 
     async delete(req, res, next) {
         // #swagger.tags = ['Meetups']
-        const {id} = req.params;
+        const { id } = req.params;
         const result = await meetupService.delete(id);
         return res.status(httpStatus.OK).json(result);
     }

@@ -8,30 +8,46 @@ class AuthController {
     async login(req, res, next) {
         // #swagger.tags = ['Auth']
         const loginDto = new LoginDto(req.body);
-        const user = await userService.getByEmailAndPassword(loginDto);
+        const { refreshToken, accessToken, user } = await userService.login(loginDto);
 
-        delete user.dataValues.password;
-        const token = jwt.sign(user.dataValues, process.env.JWT_SECRET, {expiresIn: "1h"});
-
-        res.cookie('jwt-access-token', token, { // где хранить название ключ 'jwt-access-token'
+        return res.cookie('jwt-access-token', accessToken, {
             httpOnly: true,
-        }).status(httpStatus.OK).send(token);
+        }).cookie('jwt-refresh-token', refreshToken, {
+            httpOnly: true,
+        }).status(httpStatus.OK).send(accessToken);
     }
 
     async register(req, res, next) {
         // #swagger.tags = ['Auth']
         const registerDto = new RegisterDto(req.body);
-        const result = await userService.create(registerDto);
-        return res.status(httpStatus.OK).json(result);
+        const { refreshToken, accessToken, user } = await userService.registration(registerDto);
+
+        return res.cookie('jwt-access-token', accessToken, {
+            httpOnly: true,
+        }).cookie('jwt-refresh-token', refreshToken, {
+            httpOnly: true,
+        }).status(httpStatus.OK).send(accessToken);
     }
 
     async logout(req, res, next) {
         // #swagger.tags = ['Auth']
-        res.clearCookie('jwt-access-token').status(httpStatus.OK).json({ message: 'Logged out' });
+        const userId = req.user?.id;
+        const result = await userService.logout(userId);
+
+        res.clearCookie('jwt-access-token')
+            .clearCookie('jwt-refresh-token')
+            .status(httpStatus.OK).json({ message: 'Logged out' });
     }
 
-    async updateTokens(req, res, next) {
+    async refreshTokens(req, res, next) {
         // #swagger.tags = ['Auth']
+        const refreshToken = req.cookies['jwt-refresh-token'];
+        const tokens = await userService.refresh(refreshToken);
+        return res.cookie('jwt-access-token', tokens.accessToken, {
+            httpOnly: true,
+        }).cookie('jwt-refresh-token', tokens.refreshToken, {
+            httpOnly: true,
+        }).status(httpStatus.OK).send(tokens.accessToken);
     }
 }
 

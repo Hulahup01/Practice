@@ -10,11 +10,11 @@ const asyncHandler = require('express-async-handler');
 router.post(
     '/login',
     isValid(loginSchema, 'body'),
-    (authController.login)
+    asyncHandler(authController.login)
 );
 router.post(
     '/register',
-    /*isValid(registerSchema, 'body'),*/
+    isValid(registerSchema, 'body'),
     asyncHandler(authController.register)
 );
 router.get(
@@ -23,10 +23,9 @@ router.get(
     asyncHandler(authController.logout)
 );
 
-router.post(
-    '/update-tokens',
-    passport.authenticate('jwt', { session: false }),
-    asyncHandler(authController.updateTokens)
+router.get(
+    '/refresh-tokens',
+    asyncHandler(authController.refreshTokens)
 );
 
 module.exports = router;

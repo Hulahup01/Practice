@@ -1,5 +1,6 @@
 const sequelize = require('../config/db');
 const { DataTypes } = require('sequelize');
+const Token = require('./token.entity');
 
 const User = sequelize.define('user', {
     id: {
@@ -27,5 +28,8 @@ const User = sequelize.define('user', {
 }, {
     timestamps: false
 });
+
+Token.belongsTo(User);
+User.hasMany(Token);
 
 module.exports = User;

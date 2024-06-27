@@ -115,7 +115,7 @@ class MeetupService {
     }
 
     async delete(id) {
-        const deletedRows = await MeetupRepository.remove(id);
+        const deletedRows = await MeetupRepository.remove({ where: { id } });
         if (deletedRows === 0) {
             throw new ServiceError(MeetupErrors.MEETUP_NOT_FOUND);
         }

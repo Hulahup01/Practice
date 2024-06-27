@@ -33,7 +33,7 @@ class TagService {
     }
 
     async delete(id) {
-        const deletedRows = await TagRepository.remove(id);
+        const deletedRows = await TagRepository.remove({ where: { id } });
         if (deletedRows === 0) {
             throw new ServiceError(TagErrors.TAG_NOT_FOUND);
         }
