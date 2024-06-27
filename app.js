@@ -1,29 +1,30 @@
 require('dotenv').config();
 const express = require('express');
-const sequelize = require('./db');
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const sequelize = require('./src/config/db');
 const status = require('http-status');
-const router = require('./routes/index');
-const errorHandler = require('./middleware/error-handling.middleware');
+const router = require('./src/routes/index');
+const errorHandler = require('./src/middlewares/error-handling.middleware');
+const PORT = process.env.PORT;
 
-const PORT = process.env.PORT || 3000;
 const app = express();
 
+app.use(cookieParser());
 app.use(express.json());
+app.use(passport.initialize());
+require('./src/middlewares/passport.middleware')(passport);
+
 app.use('/api', router);
+
 app.use(errorHandler);
 
 app.get('/', (req, res) => {
-    res.status(status.OK).json({message: 'API'});
+    res.status(status.OK).json({message: '/API'});
 });
 
-const start = async () => {
-    try {
-        await sequelize.authenticate();
-        await sequelize.sync().then(() => console.log('Tables have been created'));
-        app.listen(PORT, () => console.log(`Sever started on port ${PORT}`));
-    } catch(e) {
-        console.log(e);
-    }
+const start = () => {
+    sequelize.sync().then(r =>  app.listen(PORT));
 };
 
 start();
