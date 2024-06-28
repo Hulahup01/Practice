@@ -5,7 +5,7 @@
     "version": "1.0",
     "description": "Meetup API Information"
   },
-  "host": "localhost:3000",
+  "host": "practice-de0d.onrender.com",
   "basePath": "/",
   "tags": [
     {
