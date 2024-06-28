@@ -2,7 +2,7 @@ class UpdateTagDto {
     label;
 
     constructor(data) {
-        this.name = data?.label;
+        this.label = data?.label;
     }
 }
 
