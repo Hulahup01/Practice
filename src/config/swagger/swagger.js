@@ -6,7 +6,7 @@ const doc = {
         version: '1.0',
         description: 'Meetup API Information',
     },
-    host: "localhost:5000",
+    schemes: ['http', 'https'],
     basePath: "/",
     tags: [
         {
