@@ -10,15 +10,20 @@
   "tags": [
     {
       "name": "Meetups",
-      "definitions": "Endpoint"
+      "description": "Endpoint"
     },
     {
       "name": "Tags",
-      "definitions": "Endpoint"
+      "description": "Endpoint"
+    },
+    {
+      "name": "Auth",
+      "description": "Endpoint"
     }
   ],
   "schemes": [
-    "http"
+    "http",
+    "https"
   ],
   "paths": {
     "/": {
@@ -36,7 +41,51 @@
         "tags": [
           "Meetups"
         ],
-        "description": "",
+        "description": "Get all meetups",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "time",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "type": "array"
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -47,7 +96,16 @@
         "tags": [
           "Meetups"
         ],
-        "description": "",
+        "description": "Create new meetup",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateMeetup"
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -60,13 +118,13 @@
         "tags": [
           "Meetups"
         ],
-        "description": "",
+        "description": "Get meetup by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -79,13 +137,13 @@
         "tags": [
           "Meetups"
         ],
-        "description": "",
+        "description": "Delete existing meetup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -98,13 +156,20 @@
         "tags": [
           "Meetups"
         ],
-        "description": "",
+        "description": "Update existing meetup",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateMeetup"
+            }
           }
         ],
         "responses": {
@@ -119,7 +184,21 @@
         "tags": [
           "Tags"
         ],
-        "description": "",
+        "description": "Get all tags",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "type": "number"
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -130,7 +209,16 @@
         "tags": [
           "Tags"
         ],
-        "description": "",
+        "description": "Create new tag",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateTag"
+            }
+          }
+        ],
         "responses": {
           "default": {
             "description": ""
@@ -143,13 +231,13 @@
         "tags": [
           "Tags"
         ],
-        "description": "",
+        "description": "Get tag by ID",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -162,13 +250,13 @@
         "tags": [
           "Tags"
         ],
-        "description": "",
+        "description": "Delete existing tag",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
           }
         ],
         "responses": {
@@ -181,15 +269,92 @@
         "tags": [
           "Tags"
         ],
-        "description": "",
+        "description": "Update existing tag",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string"
+            "type": "number"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateTag"
+            }
           }
         ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Login",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Login"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Register",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Logout",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/auth/refresh-tokens": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "description": "Refresh tokens",
         "responses": {
           "default": {
             "description": ""
@@ -199,59 +364,170 @@
     }
   },
   "definitions": {
-    "Tags": {
+    "UpdateMeetup": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number",
-          "example": 1
-        },
-        "label": {
-          "type": "string",
-          "example": "Node.js"
-        }
-      }
-    },
-    "Meetups": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "number",
-          "example": 1
-        },
         "name": {
           "type": "string",
-          "example": "Practice group 8"
+          "example": "New name"
         },
         "description": {
           "type": "string",
-          "example": "Node.js group"
-        },
-        "place": {
-          "type": "string",
-          "example": "Minsk"
+          "example": "New description"
         },
         "time": {
           "type": "string",
-          "example": "2024-06-21T21:00:00.000Z"
+          "example": "2024-06-09 16:30:00.000+0300"
+        },
+        "location": {
+          "type": "string",
+          "example": "New location"
         },
         "tags": {
           "type": "array",
+          "example": [
+            "Nodejs",
+            "JS"
+          ],
           "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "number",
-                "example": 1
-              },
-              "label": {
-                "type": "string",
-                "example": "Node.js"
-              }
-            }
+            "type": "string"
           }
         }
       }
+    },
+    "GetMeetup": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "string",
+          "example": "1"
+        },
+        "limit": {
+          "type": "string",
+          "example": "3"
+        },
+        "sort": {
+          "type": "string",
+          "example": "name"
+        },
+        "order": {
+          "type": "string",
+          "example": "asc"
+        },
+        "search": {
+          "type": "string",
+          "example": ""
+        },
+        "tags": {
+          "type": "array",
+          "example": [],
+          "items": {}
+        }
+      }
+    },
+    "CreateMeetup": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Meetup NodeJs 1"
+        },
+        "description": {
+          "type": "string",
+          "example": "Group 8"
+        },
+        "time": {
+          "type": "string",
+          "example": "2024-06-10 19:30:00.000+0300"
+        },
+        "location": {
+          "type": "string",
+          "example": "Space"
+        },
+        "tags": {
+          "type": "array",
+          "example": [
+            "Nodejs",
+            "JS"
+          ],
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "time",
+        "location"
+      ]
+    },
+    "UpdateTag": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "example": "New label"
+        }
+      }
+    },
+    "GetTag": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "string",
+          "example": "1"
+        },
+        "limit": {
+          "type": "string",
+          "example": "3"
+        }
+      }
+    },
+    "CreateTag": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string",
+          "example": "Nodejs"
+        }
+      },
+      "required": [
+        "label"
+      ]
+    },
+    "Login": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "boss@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "12345678"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
+    },
+    "Register": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "example": "aboba@gmail.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "123"
+        }
+      },
+      "required": [
+        "email",
+        "password"
+      ]
     }
   }
 }

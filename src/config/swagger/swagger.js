@@ -7,6 +7,10 @@ const doc = {
         description: 'Meetup API Information',
     },
     host: "localhost:5000",
+    schemes: [
+        'http',
+        'https'
+    ],
     basePath: "/",
     tags: [
         {
@@ -23,23 +27,46 @@ const doc = {
         },
     ],
     definitions: {
-        Tags: {
-            id: 1,
-            label: "Node.js",
+        UpdateMeetup: {
+            name: "New name",
+            description: "New description",
+            time: "2024-06-09 16:30:00.000+0300",
+            location: "New location",
+            tags: ["Nodejs", "JS"],
         },
-        Meetups: {
-            id: 1,
-            name: "Practice group 8",
-            description: "Node.js group",
-            place: "Minsk",
-            time: "2024-06-21T21:00:00.000Z",
-            tags: [
-                {
-                    id: 1,
-                    label: "Node.js"
-                }
-            ]
-        }
+        GetMeetup: {
+            page: '1',
+            limit: '3',
+            sort: 'name',
+            order: 'asc',
+            search: '',
+            tags: []
+        },
+        CreateMeetup: {
+            $name: "Meetup NodeJs 1",
+            description: "Group 8",
+            $time: "2024-06-10 19:30:00.000+0300",
+            $location: "Space",
+            tags: ['Nodejs', 'JS'],
+        },
+        UpdateTag: {
+            label: "New label",
+        },
+        GetTag: {
+            page: '1',
+            limit: '3',
+        },
+        CreateTag: {
+            $label: "Nodejs",
+        },
+        Login: {
+            $email: "boss@gmail.com",
+            $password: "12345678",
+        },
+        Register: {
+            $email: "aboba@gmail.com",
+            $password: "123",
+        },
     }
 }
 
